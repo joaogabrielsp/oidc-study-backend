@@ -86,4 +86,24 @@ export const authController: FastifyPluginAsync = async (fastify) => {
 
     return reply.redirect(process.env.FRONTEND_URL!);
   });
+
+  fastify.get("/me", async (req, reply) => {
+    const access_token = req.cookies.access_token;
+
+
+    if (!access_token){
+      return reply.status(401).send({
+        error: "Missing access token",
+      });
+    }
+    const user = await authService.getUserInfo(access_token);
+
+    if (!user) {
+      return reply.status(401).send({
+        error: "Invalid access token",
+      });
+    }
+
+    return reply.status(200).send(user);
+  })
 };

@@ -100,4 +100,23 @@ export const authService = {
 
     return response.json() as Promise<TokenResponse>;
   },
+
+  async getUserInfo(access_token: string) {
+    const userInfoEndpoint =
+      `${process.env.KEYCLOAK_ISSUER}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/userinfo`;
+
+    const response = await fetch(userInfoEndpoint, {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return response.json();
+  }
 };
