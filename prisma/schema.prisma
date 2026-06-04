@@ -13,3 +13,10 @@ model User {
   email String @unique
   name  String?
 }
+
+model Note {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
