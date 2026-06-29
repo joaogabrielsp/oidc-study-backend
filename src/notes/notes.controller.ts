@@ -1,12 +1,13 @@
 import { FastifyPluginAsync } from "fastify";
 import { authenticate } from "../auth/authenticate.js";
 import { notesService } from "./notes.service.js";
+import { authorize } from "../auth/authorize.js";
 
 export const notesController: FastifyPluginAsync = async (fastify) => {
   fastify.post(
     "/notes",
     {
-      preHandler: [authenticate],
+      preHandler: [authenticate, authorize("create_note")],
     },
     async (req, reply) => {
       const { text } = req.body as {
@@ -28,7 +29,7 @@ export const notesController: FastifyPluginAsync = async (fastify) => {
   fastify.get(
     "/notes",
     {
-      preHandler: [authenticate],
+      preHandler: [authenticate, authorize("read_note")],
     },
     async (req, reply) => {
       const notes = await notesService.findAll();
@@ -40,7 +41,7 @@ export const notesController: FastifyPluginAsync = async (fastify) => {
   fastify.get(
     "/notes/:id",
     {
-      preHandler: [authenticate],
+      preHandler: [authenticate, authorize("read_note")],
     },
     async (req, reply) => {
       const { id } = req.params as {
@@ -62,7 +63,7 @@ export const notesController: FastifyPluginAsync = async (fastify) => {
   fastify.put(
     "/notes/:id",
     {
-      preHandler: [authenticate],
+      preHandler: [authenticate, authorize("update_note")],
     },
     async (req, reply) => {
       const { id } = req.params as {
@@ -95,7 +96,7 @@ export const notesController: FastifyPluginAsync = async (fastify) => {
   fastify.delete(
     "/notes/:id",
     {
-      preHandler: [authenticate],
+      preHandler: [authenticate, authorize("delete_note")],
     },
     async (req, reply) => {
       const { id } = req.params as {
