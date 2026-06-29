@@ -13,3 +13,13 @@ services:
 
     ports:
       - "127.0.0.1:8080:8080"
+
+  permify:
+    container_name: auth-study-permify
+    image: ghcr.io/permify/permify:latest
+
+    command: serve
+
+    ports:
+      - "127.0.0.1:3476:3476"
+      - "127.0.0.1:3478:3478"

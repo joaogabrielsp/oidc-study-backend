@@ -1,0 +1,14 @@
+export const schema = `
+entity user {}
+
+entity app {
+  relation admin @user
+  relation editor @user
+  relation viewer @user
+
+  action read_note = admin or editor or viewer
+  action create_note = admin or editor
+  action update_note = admin or editor
+  action delete_note = admin
+}
+`;
